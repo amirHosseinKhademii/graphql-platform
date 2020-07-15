@@ -1,0 +1,4 @@
+{
+  "mdb": "mongodb+srv://sourena:sourena@cluster0-b2v23.mongodb.net/shop-new?retryWrites=true&w=majority",
+  "secretKey": "some very secret key"
+}
