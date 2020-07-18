@@ -33,16 +33,13 @@ module.exports = {
       try {
         const { products, price } = args;
         const user = authCheck(context);
-        const theUser = await User.findById(user.id);
         const newOrder = new Order({
           userName: user.userName,
           createdAt: new Date().toISOString(),
           products: products,
           price,
         });
-        theUser.cart = [];
         const res = await newOrder.save();
-        await theUser.save();
         return res;
       } catch (error) {
         console.error(error);

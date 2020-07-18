@@ -10,7 +10,6 @@ const typeDefs = gql`
     password: String
     token: String
     profile: Profile
-    cart: [ID]
     createdAt: String
   }
   type Profile {

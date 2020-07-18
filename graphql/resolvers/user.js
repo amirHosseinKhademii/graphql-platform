@@ -32,22 +32,6 @@ module.exports = {
         console.error(error);
       }
     },
-    getCart: async (parent, args, context, info) => {
-      try {
-        const { userId } = args;
-        const user = await User.findById(userId);
-        let products = [];
-        user.cart.forEach((item) => {
-          const product = Product.findById(item);
-          if (product) {
-            products.unshift(product);
-          }
-        });
-        return products;
-      } catch (error) {
-        console.error(error);
-      }
-    },
   },
   Mutation: {
     signup: async (parent, args, context, info) => {
@@ -130,24 +114,6 @@ module.exports = {
         throw new UserInputError("کاربر نا معتبر", {
           errors: { msg: "این نام کاربری ثبت نشده است" },
         });
-      }
-    },
-    addToCart: async (parent, args, context, info) => {
-      const { userId, productId } = args;
-      const user = await User.findById(userId);
-      user.cart = [productId, ...user.cart];
-      const res = await user.save();
-      return res;
-    },
-    deleteFromCart: async (parent, args, context, info) => {
-      try {
-        const { userId, productId } = args;
-        const user = await User.findById(userId);
-        user.cart = user.cart.filter((item) => item !== productId);
-        const res = await user.save();
-        return res;
-      } catch (error) {
-        console.log(error);
       }
     },
   },

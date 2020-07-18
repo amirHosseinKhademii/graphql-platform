@@ -16,6 +16,5 @@ const UserSchema = new Schema({
     postCode: Number,
     userName: String,
   },
-  cart: [],
 });
 module.exports = User = mongoose.model("user", UserSchema);
