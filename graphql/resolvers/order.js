@@ -20,7 +20,11 @@ module.exports = {
         let products = [];
         order.products.forEach((item) => {
           const product = Product.findById(item);
-          products.unshift(product);
+          if (product) {
+            products.unshift(product);
+          } else {
+            return;
+          }
         });
         return products;
       } catch (error) {
