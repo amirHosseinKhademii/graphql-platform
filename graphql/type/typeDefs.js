@@ -73,6 +73,7 @@ const typeDefs = gql`
     getCart(userId: ID): [Product]
     getOrder(orderId: ID): [Product]
     uploads: [File]
+    getFollowers(userId: ID): [User]
   }
   type Mutation {
     signup(

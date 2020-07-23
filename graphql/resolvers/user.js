@@ -32,6 +32,16 @@ module.exports = {
         console.error(error);
       }
     },
+    getFollowers: async (parent, args, context, info) => {
+      const { userId } = args;
+      const user = await User.findById(userId);
+      let followers = [];
+      user.followers.forEach((item) => {
+        const following = User.findById(item);
+        followers.push(following);
+      });
+      return followers;
+    },
   },
   Mutation: {
     signup: async (parent, args, context, info) => {
