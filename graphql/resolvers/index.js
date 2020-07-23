@@ -1,6 +1,7 @@
 const user = require("./user");
 const product = require("./product");
 const order = require("./order");
+const post = require("./post");
 module.exports = {
   Product: {
     likeCount: (parent, args) => {
@@ -15,15 +16,25 @@ module.exports = {
       return parent.followers.length;
     },
   },
+  Post: {
+    likeCount: (parent, args) => {
+      return parent.likes.length;
+    },
+    commentCount: (parent, args) => {
+      return parent.comments.length;
+    },
+  },
   Query: {
     ...user.Query,
     ...product.Query,
     ...order.Query,
+    ...post.Query,
   },
   Mutation: {
     ...user.Mutation,
     ...product.Mutation,
     ...order.Mutation,
+    ...post.Mutation,
   },
   Subscription: {
     ...user.Subscription,

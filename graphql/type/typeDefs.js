@@ -64,6 +64,18 @@ const typeDefs = gql`
     mimetype: String!
     encoding: String!
   }
+  type Post {
+    id: ID
+    userName: String
+    content: String
+    image: String
+    comments: [Comment]
+    likes: [Like]
+    commentCount: Int
+    likeCount: Int
+    updatedAt: String
+    createdAt: String
+  }
   type Query {
     getUsers: [User]
     getUser(userId: ID!): User!
@@ -74,6 +86,8 @@ const typeDefs = gql`
     getOrder(orderId: ID): [Product]
     uploads: [File]
     getFollowers(userId: ID): [User]
+    getPost(postId: ID): Post
+    getPosts: [Post]
   }
   type Mutation {
     signup(
@@ -128,6 +142,9 @@ const typeDefs = gql`
     sendCart(orderId: ID!): Order!
     upload(file: Upload!): File!
     addFollower(userId: ID!): User
+    addPost(content: String!, image: String!): Post
+    deletePost(postId: ID!): Post
+    updatePost(postId: ID!, content: String, image: String): Post
   }
   type Subscription {
     signupUser: User!
