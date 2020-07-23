@@ -145,6 +145,8 @@ const typeDefs = gql`
     addPost(content: String!, image: String!): Post
     deletePost(postId: ID!): Post
     updatePost(postId: ID!, content: String, image: String): Post
+    likePost(postId: ID!): Post
+    commentPost(postId: ID!, body: String): Post
   }
   type Subscription {
     signupUser: User!

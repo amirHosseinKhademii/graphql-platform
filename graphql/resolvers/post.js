@@ -42,5 +42,41 @@ module.exports = {
       const res = await post.save();
       return res;
     },
+    likePost: async (parent, args, context, info) => {
+      const { postId } = args;
+      const user = authCheck(context);
+      const post = await Post.findById(postId);
+      const find = post.likes.find((item) => item.userName === user.userName);
+      if (find) {
+        post.likes = post.likes.filter((it) => it.userName !== user.userName);
+      } else {
+        post.likes = [
+          {
+            userName: user.userName,
+            createdAt: new Date().toISOString(),
+          },
+          ...post.likes,
+        ];
+      }
+      const res = await post.save();
+      return res;
+    },
+    commentPost: async (parent, args, context, info) => {
+      const { postId, body } = args;
+      const { userName } = authCheck(context);
+      const post = await Post.findById(postId);
+      if (body !== "") {
+        post.comments = [
+          {
+            body,
+            userName,
+            createdAt: new Date().toISOString(),
+          },
+          ...post.comments,
+        ];
+      }
+      const res = await post.save();
+      return res;
+    },
   },
 };
