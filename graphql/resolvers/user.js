@@ -47,12 +47,12 @@ module.exports = {
     signup: async (parent, args, context, info) => {
       const { name, lastName, userName, email, password } = args;
       const user = await User.findOne({ email: email });
-
+      const userByUserName = await User.findOne({ userName: userName });
       //validation
-      if (user) {
-        throw new UserInputError("ایمیل تکراری", {
+      if (user || userByUserName) {
+        throw new UserInputError("کاربر تکراری", {
           errors: {
-            msg: "این ایمیل  قبلا ثبت شده است",
+            msg: "این کاربر  قبلا ثبت شده است",
           },
         });
       } else if (
@@ -77,7 +77,6 @@ module.exports = {
           password: hashed,
           createdAt: new Date().toDateString(),
         });
-
         const res = await newUser.save();
         context.pubsub.publish("NEW_USER", {
           signupUser: res,
