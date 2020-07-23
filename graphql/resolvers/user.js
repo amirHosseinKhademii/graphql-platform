@@ -1,8 +1,8 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
-const Product = require("../../models/Product");
 const { UserInputError } = require("apollo-server");
+const authCheck = require("../../util/authCheck");
 const config = require("config");
 // generate token
 const tokenGenerator = (user) => {
@@ -115,6 +115,21 @@ module.exports = {
           errors: { msg: "این نام کاربری ثبت نشده است" },
         });
       }
+    },
+    addFollower: async (parent, args, context, info) => {
+      const { userId } = args;
+      const user = authCheck(context);
+      const targetUser = await User.findById(userId);
+      const find = targetUser.followers.find((it) => it === user.id);
+      if (find) {
+        targetUser.followers = targetUser.followers.filter(
+          (ite) => ite !== user.id
+        );
+      } else {
+        targetUser.followers = [...targetUser.followers, user.id];
+      }
+      const res = await targetUser.save();
+      return res;
     },
   },
   Subscription: {

@@ -16,5 +16,7 @@ const UserSchema = new Schema({
     postCode: Number,
     userName: String,
   },
+  followerCount: Number,
+  followers: [],
 });
 module.exports = User = mongoose.model("user", UserSchema);

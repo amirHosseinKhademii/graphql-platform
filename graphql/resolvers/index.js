@@ -10,6 +10,11 @@ module.exports = {
       return parent.comments.length;
     },
   },
+  User: {
+    followerCount: (parent, args) => {
+      return parent.followers.length;
+    },
+  },
   Query: {
     ...user.Query,
     ...product.Query,

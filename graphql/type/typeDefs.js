@@ -11,6 +11,8 @@ const typeDefs = gql`
     token: String
     profile: Profile
     createdAt: String
+    followers: [ID]
+    followerCount: Int
   }
   type Profile {
     image: String
@@ -124,6 +126,7 @@ const typeDefs = gql`
     payCart(orderId: ID!): Order!
     sendCart(orderId: ID!): Order!
     upload(file: Upload!): File!
+    addFollower(userId: ID!): User
   }
   type Subscription {
     signupUser: User!
