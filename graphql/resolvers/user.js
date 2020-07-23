@@ -1,8 +1,8 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
-const Product = require("../../models/Product");
 const { UserInputError } = require("apollo-server");
+const authCheck = require("../../util/authCheck");
 const config = require("config");
 // generate token
 const tokenGenerator = (user) => {
@@ -32,17 +32,27 @@ module.exports = {
         console.error(error);
       }
     },
+    getFollowers: async (parent, args, context, info) => {
+      const { userId } = args;
+      const user = await User.findById(userId);
+      let followers = [];
+      user.followers.forEach((item) => {
+        const following = User.findById(item);
+        followers.push(following);
+      });
+      return followers;
+    },
   },
   Mutation: {
     signup: async (parent, args, context, info) => {
       const { name, lastName, userName, email, password } = args;
       const user = await User.findOne({ email: email });
-
+      const userByUserName = await User.findOne({ userName: userName });
       //validation
-      if (user) {
-        throw new UserInputError("ایمیل تکراری", {
+      if (user || userByUserName) {
+        throw new UserInputError("کاربر تکراری", {
           errors: {
-            msg: "این ایمیل  قبلا ثبت شده است",
+            msg: "این کاربر  قبلا ثبت شده است",
           },
         });
       } else if (
@@ -67,7 +77,6 @@ module.exports = {
           password: hashed,
           createdAt: new Date().toDateString(),
         });
-
         const res = await newUser.save();
         context.pubsub.publish("NEW_USER", {
           signupUser: res,
@@ -115,6 +124,21 @@ module.exports = {
           errors: { msg: "این نام کاربری ثبت نشده است" },
         });
       }
+    },
+    addFollower: async (parent, args, context, info) => {
+      const { userId } = args;
+      const user = authCheck(context);
+      const targetUser = await User.findById(userId);
+      const find = targetUser.followers.find((it) => it === user.id);
+      if (find) {
+        targetUser.followers = targetUser.followers.filter(
+          (ite) => ite !== user.id
+        );
+      } else {
+        targetUser.followers = [...targetUser.followers, user.id];
+      }
+      const res = await targetUser.save();
+      return res;
     },
   },
   Subscription: {

@@ -11,6 +11,8 @@ const typeDefs = gql`
     token: String
     profile: Profile
     createdAt: String
+    followers: [ID]
+    followerCount: Int
   }
   type Profile {
     image: String
@@ -62,6 +64,18 @@ const typeDefs = gql`
     mimetype: String!
     encoding: String!
   }
+  type Post {
+    id: ID
+    userName: String
+    content: String
+    image: String
+    comments: [Comment]
+    likes: [Like]
+    commentCount: Int
+    likeCount: Int
+    updatedAt: String
+    createdAt: String
+  }
   type Query {
     getUsers: [User]
     getUser(userId: ID!): User!
@@ -71,6 +85,9 @@ const typeDefs = gql`
     getCart(userId: ID): [Product]
     getOrder(orderId: ID): [Product]
     uploads: [File]
+    getFollowers(userId: ID): [User]
+    getPost(postId: ID): Post
+    getPosts: [Post]
   }
   type Mutation {
     signup(
@@ -124,6 +141,12 @@ const typeDefs = gql`
     payCart(orderId: ID!): Order!
     sendCart(orderId: ID!): Order!
     upload(file: Upload!): File!
+    addFollower(userId: ID!): User
+    addPost(content: String!, image: String!): Post
+    deletePost(postId: ID!): Post
+    updatePost(postId: ID!, content: String, image: String): Post
+    likePost(postId: ID!): Post
+    commentPost(postId: ID!, body: String): Post
   }
   type Subscription {
     signupUser: User!
