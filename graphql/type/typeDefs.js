@@ -160,7 +160,7 @@ const typeDefs = gql`
   type Subscription {
     signupUser: User!
     newOrder: Order!
-    newMessage(channelId: String): Message
+    newMessage: Message
   }
 `;
 module.exports = typeDefs;

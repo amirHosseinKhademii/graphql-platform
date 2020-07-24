@@ -21,10 +21,15 @@ module.exports = {
           createdAt: new Date().toISOString(),
         });
         const res = await newMessage.save();
-        pubsub.publish("MESSAGE_SENT", {
+        context.pubsub.publish("NEW_MESSAGE", {
+          newMessage: res,
+        });
+        {
+          /*pubsub.publish("MESSAGE_SENT", {
           newMessage: res,
           channelId,
-        });
+        });*/
+        }
         return res;
       } catch (error) {
         console.log(error);
@@ -33,21 +38,20 @@ module.exports = {
   },
   Subscription: {
     newMessage: {
-      subscribe: withFilter(
-        () => pubsub.asyncIterator("MESSAGE_SENT"),
-        (payload, args) => {
-          return payload.channelId === args.channelId;
-        }
-      ),
+      subscribe: (_, __, { pubsub }) => {
+        return pubsub.asyncIterator("NEW_MESSAGE");
+      },
     },
   },
 };
 
 {
-  /* newMessage: {
+  /*newMessageFilter: {
       subscribe: withFilter(
-        () => pubsub.asyncIterator("messageAdded"),
-        (payload, args) => payload.messageAdded.channelId === args.channelId
+        () => pubsub.asyncIterator("MESSAGE_SENT"),
+        (payload, args) => {
+          return payload.channelId === args.channelId;
+        }
       ),
     },*/
 }
