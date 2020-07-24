@@ -81,6 +81,7 @@ const typeDefs = gql`
     text: String!
     user: User!
     createdAt: String
+    channelId: String
   }
   type Query {
     getUsers: [User]

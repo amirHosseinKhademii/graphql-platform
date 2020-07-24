@@ -17,6 +17,7 @@ module.exports = {
         const newMessage = new Message({
           text,
           user,
+          channelId,
           createdAt: new Date().toISOString(),
         });
         const res = await newMessage.save();
