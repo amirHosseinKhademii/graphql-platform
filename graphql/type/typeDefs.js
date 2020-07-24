@@ -76,6 +76,12 @@ const typeDefs = gql`
     updatedAt: String
     createdAt: String
   }
+  type Message {
+    id: ID
+    text: String!
+    user: User!
+    createdAt: String
+  }
   type Query {
     getUsers: [User]
     getUser(userId: ID!): User!
@@ -88,6 +94,7 @@ const typeDefs = gql`
     getFollowers(userId: ID): [User]
     getPost(postId: ID): Post
     getPosts: [Post]
+    getMessages: [Message]
   }
   type Mutation {
     signup(
@@ -147,10 +154,12 @@ const typeDefs = gql`
     updatePost(postId: ID!, content: String, image: String): Post
     likePost(postId: ID!): Post
     commentPost(postId: ID!, body: String): Post
+    createMessage(text: String!, channelId: String): Message
   }
   type Subscription {
     signupUser: User!
     newOrder: Order!
+    newMessage(channelId: String): Message
   }
 `;
 module.exports = typeDefs;
