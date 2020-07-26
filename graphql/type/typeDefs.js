@@ -156,6 +156,7 @@ const typeDefs = gql`
     likePost(postId: ID!): Post
     commentPost(postId: ID!, body: String): Post
     createMessage(text: String!, channelId: String): Message
+    deleteCommentPost(postId: ID!, commentId: ID!): Post
   }
   type Subscription {
     signupUser: User!

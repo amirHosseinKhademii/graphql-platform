@@ -78,5 +78,22 @@ module.exports = {
       const res = await post.save();
       return res;
     },
+    deleteCommentPost: async (parent, args, context, info) => {
+      try {
+        const { postId, commentId } = args;
+        const user = authCheck(context);
+        const post = await Post.findById(postId);
+        const comment = post.comments.find((it) => it.id === commentId);
+        if (comment && comment.userName === user.userName) {
+          post.comments = post.comments.filter((item) => item.id !== commentId);
+          const res = await post.save();
+          return res;
+        } else {
+          throw new Error({ msg: "این نظر متعلق به فرد دیگری است" });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 };
