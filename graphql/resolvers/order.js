@@ -20,7 +20,11 @@ module.exports = {
         let products = [];
         order.products.forEach((item) => {
           const product = Product.findById(item);
-          products.unshift(product);
+          if (product) {
+            products.unshift(product);
+          } else {
+            return;
+          }
         });
         return products;
       } catch (error) {
@@ -33,16 +37,13 @@ module.exports = {
       try {
         const { products, price } = args;
         const user = authCheck(context);
-        const theUser = await User.findById(user.id);
         const newOrder = new Order({
           userName: user.userName,
           createdAt: new Date().toISOString(),
           products: products,
           price,
         });
-        theUser.cart = [];
         const res = await newOrder.save();
-        await theUser.save();
         return res;
       } catch (error) {
         console.error(error);
