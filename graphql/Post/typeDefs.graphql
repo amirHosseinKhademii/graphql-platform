@@ -1,0 +1,25 @@
+type Post {
+  id: ID
+  userName: String
+  content: String
+  image: String
+  comments: [Comment]
+  likes: [Like]
+  commentCount: Int
+  likeCount: Int
+  updatedAt: String
+  createdAt: String
+}
+type Query {
+  getPost(postId: ID): Post
+  getPosts: [Post]
+}
+
+type Mutation {
+  addPost(content: String!, image: String!): Post
+  deletePost(postId: ID!): Post
+  updatePost(postId: ID!, content: String, image: String): Post
+  likePost(postId: ID!): Post
+  commentPost(postId: ID!, body: String): Post
+  deleteCommentPost(postId: ID!, commentId: ID!): Post
+}

@@ -1,9 +1,9 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("../../models/User");
 const { UserInputError } = require("apollo-server");
-const authCheck = require("../../util/authCheck");
 const config = require("config");
+const User = require("../../models/User");
+const authCheck = require("../../util/authCheck");
 // generate token
 const tokenGenerator = (user) => {
   const secret = config.get("secretKey");
@@ -82,11 +82,7 @@ module.exports = {
           signupUser: res,
         });
         const token = tokenGenerator(res);
-        return {
-          ...res._doc,
-          id: res._id,
-          token,
-        };
+        return token;
       }
     },
     login: async (parent, args, context, info) => {
@@ -104,11 +100,7 @@ module.exports = {
           });
         } else {
           const token = tokenGenerator(user);
-          return {
-            ...user._doc,
-            id: user._id,
-            token,
-          };
+          return token;
         }
       }
     },

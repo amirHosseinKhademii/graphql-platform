@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const messageSchema = new Schema({
   text: String,
-  user: {},
+  userName: String,
   createdAt: String,
   channelId: String,
 });

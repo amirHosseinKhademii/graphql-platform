@@ -1,0 +1,50 @@
+type User {
+  id: ID
+  name: String
+  lastName: String
+  userName: String
+  email: String
+  password: String
+  token: String
+  profile: Profile
+  createdAt: String
+  followers: [ID]
+  followerCount: Int
+}
+type Profile {
+  image: String
+  address: String
+  phone: String
+  idCode: String
+  postCode: String
+  userName: String
+}
+type Query {
+  getUsers: [User]
+  getUser(userId: ID!): User!
+  getFollowers(userId: ID): [User]
+}
+
+type Mutation {
+  signup(
+    name: String!
+    lastName: String!
+    userName: String!
+    email: String!
+    password: String!
+  ): String
+
+  login(userName: String!, password: String!): String
+  createProfile(
+    image: String
+    address: String
+    phone: String
+    idCode: String
+    postCode: String
+    userName: String!
+  ): User!
+  addFollower(userId: ID!): User
+}
+type Subscription {
+  signupUser: User!
+}

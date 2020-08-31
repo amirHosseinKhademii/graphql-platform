@@ -1,8 +1,8 @@
-const user = require("./user");
-const product = require("./product");
-const order = require("./order");
-const post = require("./post");
-const message = require("./message");
+const user = require("./User/resolvers");
+const product = require("./Product/resolvers");
+const order = require("./Order/resolvers");
+const post = require("./Post/resolvers");
+const message = require("./Message/resolvers");
 module.exports = {
   Product: {
     likeCount: (parent, args) => {

@@ -1,5 +1,5 @@
-const authCheck = require("../../util/authCheck");
 const Post = require("../../models/Post");
+const authCheck = require("../../util/authCheck");
 
 module.exports = {
   Query: {

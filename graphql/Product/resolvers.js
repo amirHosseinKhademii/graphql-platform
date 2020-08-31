@@ -1,5 +1,6 @@
 const Product = require("../../models/Product");
 const authCheck = require("../../util/authCheck");
+
 module.exports = {
   Query: {
     getProducts: async (parent, args, context, info) => {

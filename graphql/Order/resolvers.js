@@ -1,7 +1,7 @@
-const Order = require("../../models/Order");
 const authCheck = require("../../util/authCheck");
+const Order = require("../../models/Order");
 const Product = require("../../models/Product");
-const User = require("../../models/User");
+
 module.exports = {
   Query: {
     getOrders: async (parent, args, context, info) => {
