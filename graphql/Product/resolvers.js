@@ -28,15 +28,15 @@ module.exports = {
         userName,
         createdAt: new Date().toISOString(),
       });
-      const res = await newProduct.save();
-      return res;
+      await newProduct.save();
+      return true;
     },
     deleteProduct: async (parent, args, context, info) => {
       const user = authCheck(context);
       const product = await Product.findById(args.productId);
       if (product.userName === user.userName) {
-        const res = await product.delete();
-        return res;
+        await product.delete();
+        return true;
       }
     },
     updateProduct: async (parent, args, context, info) => {
@@ -60,8 +60,8 @@ module.exports = {
       product.number = number ? number : product.number;
       product.desc = desc ? desc : product.desc;
       product.title = title ? title : product.title;
-      const res = await product.save();
-      return res;
+      await product.save();
+      return true;
     },
     likeProduct: async (parent, args, context, info) => {
       try {
@@ -84,8 +84,8 @@ module.exports = {
             },
           ];
         }
-        const res = await product.save();
-        return res;
+        await product.save();
+        return true;
       } catch (error) {
         console.error(error);
       }
@@ -103,8 +103,8 @@ module.exports = {
           },
           ...product.comments,
         ];
-        const res = await product.save();
-        return res;
+        await product.save();
+        return true;
       } catch (error) {
         console.error(error);
       }
@@ -119,8 +119,8 @@ module.exports = {
           product.comments = product.comments.filter(
             (item) => item.id !== commentId
           );
-          const res = await product.save();
-          return res;
+          await product.save();
+          return true;
         } else {
           throw new Error({ msg: "این نظر متعلق به فرد دیگری است" });
         }

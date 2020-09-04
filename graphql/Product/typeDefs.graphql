@@ -42,8 +42,8 @@ type Mutation {
     desc: String
     title: String
     userName: String
-  ): Product!
-  deleteProduct(productId: ID!): Product!
+  ): Boolean
+  deleteProduct(productId: ID!): Boolean
   updateProduct(
     productId: ID!
     image: String
@@ -54,8 +54,8 @@ type Mutation {
     number: Int
     desc: String
     title: String
-  ): Product!
-  likeProduct(productId: ID!): Product!
-  createComment(productId: ID!, body: String!): Product!
-  deleteComment(productId: ID!, commentId: ID!): Product!
+  ): Boolean
+  likeProduct(productId: ID!): Boolean
+  createComment(productId: ID!, body: String!): Boolean
+  deleteComment(productId: ID!, commentId: ID!): Boolean
 }
