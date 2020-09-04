@@ -1,9 +1,9 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("../../models/User");
 const { UserInputError } = require("apollo-server");
-const authCheck = require("../../util/authCheck");
 const config = require("config");
+const User = require("../../models/User");
+const authCheck = require("../../util/authCheck");
 // generate token
 const tokenGenerator = (user) => {
   const secret = config.get("secretKey");
@@ -82,11 +82,7 @@ module.exports = {
           signupUser: res,
         });
         const token = tokenGenerator(res);
-        return {
-          ...res._doc,
-          id: res._id,
-          token,
-        };
+        return token;
       }
     },
     login: async (parent, args, context, info) => {
@@ -104,21 +100,18 @@ module.exports = {
           });
         } else {
           const token = tokenGenerator(user);
-          return {
-            ...user._doc,
-            id: user._id,
-            token,
-          };
+          return token;
         }
       }
     },
     createProfile: async (parent, args, context, info) => {
-      const { image, address, phone, idCode, postCode, userName } = args;
+      const { image, address, phone, idCode, postCode } = args;
+      const { userName } = authCheck(context);
       const user = await User.findOne({ userName });
       if (user) {
         user.profile = { image, address, phone, idCode, postCode, userName };
-        const res = await user.save();
-        return res;
+        await user.save();
+        return true;
       } else {
         throw new UserInputError("کاربر نا معتبر", {
           errors: { msg: "این نام کاربری ثبت نشده است" },
@@ -137,8 +130,8 @@ module.exports = {
       } else {
         targetUser.followers = [...targetUser.followers, user.id];
       }
-      const res = await targetUser.save();
-      return res;
+      await targetUser.save();
+      return true;
     },
   },
   Subscription: {

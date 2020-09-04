@@ -1,5 +1,5 @@
-const authCheck = require("../../util/authCheck");
 const Post = require("../../models/Post");
+const authCheck = require("../../util/authCheck");
 
 module.exports = {
   Query: {
@@ -24,14 +24,14 @@ module.exports = {
         updatedAt: new Date().toISOString(),
         userName: user.userName,
       });
-      const res = await newPost.save();
-      return res;
+      await newPost.save();
+      return true;
     },
     deletePost: async (parent, args, context, info) => {
       const { postId } = args;
       const post = await Post.findById(postId);
-      const res = await post.delete();
-      return res;
+      await post.delete();
+      return true;
     },
     updatePost: async (parent, args, context, info) => {
       const { postId, image, content } = args;
@@ -39,8 +39,8 @@ module.exports = {
       post.content = content !== "" ? content : post.content;
       post.image = image !== "" ? image : post.image;
       post.updatedAt = new Date().toISOString();
-      const res = await post.save();
-      return res;
+      await post.save();
+      return true;
     },
     likePost: async (parent, args, context, info) => {
       const { postId } = args;
@@ -58,8 +58,8 @@ module.exports = {
           ...post.likes,
         ];
       }
-      const res = await post.save();
-      return res;
+      await post.save();
+      return true;
     },
     commentPost: async (parent, args, context, info) => {
       const { postId, body } = args;
@@ -75,8 +75,8 @@ module.exports = {
           ...post.comments,
         ];
       }
-      const res = await post.save();
-      return res;
+      await post.save();
+      return true;
     },
     deleteCommentPost: async (parent, args, context, info) => {
       try {
@@ -86,8 +86,8 @@ module.exports = {
         const comment = post.comments.find((it) => it.id === commentId);
         if (comment && comment.userName === user.userName) {
           post.comments = post.comments.filter((item) => item.id !== commentId);
-          const res = await post.save();
-          return res;
+          await post.save();
+          return true;
         } else {
           throw new Error({ msg: "این نظر متعلق به فرد دیگری است" });
         }

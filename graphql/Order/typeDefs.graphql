@@ -1,0 +1,25 @@
+type Order {
+  id: ID
+  userName: String
+  products: [ID]
+  createdAt: String
+  payed: Boolean
+  status: String
+  price: Int
+}
+type Query {
+  getOrders: [Order]
+  getCart(userId: ID): [Product]
+  getOrder(orderId: ID): [Product]
+}
+
+type Mutation {
+  addOrder(products: [ID], price: Int!): Boolean
+  deleteOrder(orderId: ID!): Boolean
+  removeCart(productId: ID!, orderId: ID!): Boolean
+  payCart(orderId: ID!): Boolean
+  sendCart(orderId: ID!): Boolean
+}
+type Subscription {
+  newOrder: Order!
+}

@@ -1,0 +1,17 @@
+type Message {
+  id: ID
+  text: String
+  userName: String
+  createdAt: String
+  channelId: String
+}
+type Query {
+  getMessages: [Message]
+}
+
+type Mutation {
+  createMessage(text: String, channelId: String): Boolean
+}
+type Subscription {
+  newMessage(channelId: String): Message
+}
