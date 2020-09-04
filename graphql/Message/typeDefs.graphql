@@ -10,7 +10,7 @@ type Query {
 }
 
 type Mutation {
-  createMessage(text: String, channelId: String): Message
+  createMessage(text: String, channelId: String): Boolean
 }
 type Subscription {
   newMessage(channelId: String): Message

@@ -21,12 +21,12 @@ module.exports = {
           channelId,
           createdAt: new Date().toISOString(),
         });
-        const res = await newMessage.save();
+        await newMessage.save();
         pubsub.publish("MESSAGE_SENT", {
           newMessage: res,
           channelId,
         });
-        return res;
+        return true;
       } catch (error) {
         console.log(error);
       }

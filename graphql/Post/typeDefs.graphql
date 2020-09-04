@@ -16,10 +16,10 @@ type Query {
 }
 
 type Mutation {
-  addPost(content: String!, image: String!): Post
-  deletePost(postId: ID!): Post
-  updatePost(postId: ID!, content: String, image: String): Post
-  likePost(postId: ID!): Post
-  commentPost(postId: ID!, body: String): Post
-  deleteCommentPost(postId: ID!, commentId: ID!): Post
+  addPost(content: String!, image: String!): Boolean
+  deletePost(postId: ID!): Boolean
+  updatePost(postId: ID!, content: String, image: String): Boolean
+  likePost(postId: ID!): Boolean
+  commentPost(postId: ID!, body: String): Boolean
+  deleteCommentPost(postId: ID!, commentId: ID!): Boolean
 }

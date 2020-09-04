@@ -41,9 +41,8 @@ type Mutation {
     phone: String
     idCode: String
     postCode: String
-    userName: String!
-  ): User!
-  addFollower(userId: ID!): User
+  ): Boolean
+  addFollower(userId: ID!): Boolean
 }
 type Subscription {
   signupUser: User!

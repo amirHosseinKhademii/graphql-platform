@@ -14,11 +14,11 @@ type Query {
 }
 
 type Mutation {
-  addOrder(products: [ID], price: Int!): Order!
-  deleteOrder(orderId: ID!): Order!
-  removeCart(productId: ID!, orderId: ID!): Order!
-  payCart(orderId: ID!): Order!
-  sendCart(orderId: ID!): Order!
+  addOrder(products: [ID], price: Int!): Boolean
+  deleteOrder(orderId: ID!): Boolean
+  removeCart(productId: ID!, orderId: ID!): Boolean
+  payCart(orderId: ID!): Boolean
+  sendCart(orderId: ID!): Boolean
 }
 type Subscription {
   newOrder: Order!

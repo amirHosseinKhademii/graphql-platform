@@ -105,12 +105,13 @@ module.exports = {
       }
     },
     createProfile: async (parent, args, context, info) => {
-      const { image, address, phone, idCode, postCode, userName } = args;
+      const { image, address, phone, idCode, postCode } = args;
+      const { userName } = authCheck(context);
       const user = await User.findOne({ userName });
       if (user) {
         user.profile = { image, address, phone, idCode, postCode, userName };
-        const res = await user.save();
-        return res;
+        await user.save();
+        return true;
       } else {
         throw new UserInputError("کاربر نا معتبر", {
           errors: { msg: "این نام کاربری ثبت نشده است" },
@@ -129,8 +130,8 @@ module.exports = {
       } else {
         targetUser.followers = [...targetUser.followers, user.id];
       }
-      const res = await targetUser.save();
-      return res;
+      await targetUser.save();
+      return true;
     },
   },
   Subscription: {
