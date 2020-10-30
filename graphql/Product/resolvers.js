@@ -1,5 +1,7 @@
 const Product = require("../../models/Product");
 const authCheck = require("../../util/authCheck");
+const { PubSub, withFilter } = require("apollo-server");
+const pubsub = new PubSub();
 
 module.exports = {
   Query: {
@@ -28,10 +30,12 @@ module.exports = {
         userName,
         createdAt: new Date().toISOString(),
       });
-      context.pubsub.publish("NEW_PRODUCT", {
-        product: "new",
+      const res = await newProduct.save();
+      pubsub.publish("ADD_PRODUCT", {
+        newProduct: res,
+        channelId: "1",
       });
-      await newProduct.save();
+
       return true;
     },
     deleteProduct: async (parent, args, context, info) => {
@@ -133,10 +137,13 @@ module.exports = {
     },
   },
   Subscription: {
-    addProduct: {
-      subscribe: (_, __, { pubsub }) => {
-        return pubsub.asyncIterator("NEW_PRODUCT");
-      },
+    newProduct: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator("ADD_PRODUCT"),
+        (payload, args) => {
+          return payload.channelId === args.channelId;
+        }
+      ),
     },
   },
 };

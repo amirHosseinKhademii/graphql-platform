@@ -60,5 +60,5 @@ type Mutation {
   deleteComment(productId: ID!, commentId: ID!): Boolean
 }
 type Subscription {
-  addProduct: String
+  newProduct(channelId: String): Product
 }
