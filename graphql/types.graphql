@@ -16,3 +16,4 @@
 # import Product from './Product/typeDefs.graphql'
 # import Query from './Product/typeDefs.graphql'
 # import Mutation from './Product/typeDefs.graphql'
+# import Subscription from './Product/typeDefs.graphql'

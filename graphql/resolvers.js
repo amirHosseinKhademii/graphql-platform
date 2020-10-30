@@ -42,5 +42,6 @@ module.exports = {
   Subscription: {
     ...user.Subscription,
     ...message.Subscription,
+    ...product.Subscription,
   },
 };

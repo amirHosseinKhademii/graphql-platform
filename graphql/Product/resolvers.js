@@ -28,6 +28,9 @@ module.exports = {
         userName,
         createdAt: new Date().toISOString(),
       });
+      context.pubsub.publish("NEW_PRODUCT", {
+        product: "new",
+      });
       await newProduct.save();
       return true;
     },
@@ -127,6 +130,13 @@ module.exports = {
       } catch (error) {
         console.error(error);
       }
+    },
+  },
+  Subscription: {
+    addProduct: {
+      subscribe: (_, __, { pubsub }) => {
+        return pubsub.asyncIterator("NEW_PRODUCT");
+      },
     },
   },
 };
