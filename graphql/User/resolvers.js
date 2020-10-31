@@ -105,11 +105,20 @@ module.exports = {
       }
     },
     createProfile: async (parent, args, context, info) => {
-      const { image, address, phone, idCode, postCode } = args;
+      const { country, region, city, address, phone, image, postCode } = args;
       const { userName } = authCheck(context);
       const user = await User.findOne({ userName });
       if (user) {
-        user.profile = { image, address, phone, idCode, postCode, userName };
+        user.profile = {
+          country,
+          region,
+          city,
+          address,
+          phone,
+          image,
+          postCode,
+          userName,
+        };
         await user.save();
         return true;
       } else {
