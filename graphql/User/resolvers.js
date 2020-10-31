@@ -8,7 +8,12 @@ const authCheck = require("../../util/authCheck");
 const tokenGenerator = (user) => {
   const secret = config.get("secretKey");
   return jwt.sign(
-    { id: user.id, email: user.email, userName: user.userName },
+    {
+      id: user.id,
+      email: user.email,
+      userName: user.userName,
+      type: user.type,
+    },
     secret,
     { expiresIn: "100h" }
   );
