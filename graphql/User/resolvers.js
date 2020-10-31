@@ -16,17 +16,17 @@ const tokenGenerator = (user) => {
 // other shits
 module.exports = {
   Query: {
-    getUsers: async (parent, args) => {
+    getUsers: async () => {
       try {
-        const users = await User.find();
+        const users = await User.find().populate("shops");
         return users;
       } catch (error) {
         console.error(error);
       }
     },
-    getUser: async (parent, args, context, info) => {
+    getUser: async (parent, args) => {
       try {
-        const user = await User.findById(args.userId);
+        const user = await User.findById(args.userId).populate("shops");
         return user;
       } catch (error) {
         console.error(error);
@@ -45,7 +45,7 @@ module.exports = {
   },
   Mutation: {
     signup: async (parent, args, context, info) => {
-      const { name, lastName, userName, email, password } = args;
+      const { name, lastName, userName, email, password, type } = args;
       const user = await User.findOne({ email: email });
       const userByUserName = await User.findOne({ userName: userName });
       //validation
@@ -74,6 +74,7 @@ module.exports = {
           lastName,
           userName,
           email,
+          type,
           password: hashed,
           createdAt: new Date().toDateString(),
         });

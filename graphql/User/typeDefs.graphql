@@ -7,8 +7,10 @@ type User {
   password: String
   profile: Profile
   createdAt: String
+  type: String
   followers: [ID]
   followerCount: Int
+  shops: [Shop]
   token: String
 }
 type Profile {
@@ -34,6 +36,7 @@ type Mutation {
     userName: String!
     email: String!
     password: String!
+    type: String!
   ): String
 
   login(userName: String!, password: String!): String

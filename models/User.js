@@ -7,6 +7,7 @@ const UserSchema = new Schema({
   userName: String,
   email: String,
   password: String,
+  type: String,
   createdAt: String,
   profile: {
     userName: String,
@@ -20,5 +21,11 @@ const UserSchema = new Schema({
   },
   followerCount: Number,
   followers: [],
+  shops: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "shops",
+    },
+  ],
 });
-module.exports = User = mongoose.model("user", UserSchema);
+module.exports = User = mongoose.model("users", UserSchema);

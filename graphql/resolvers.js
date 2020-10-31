@@ -3,6 +3,8 @@ const product = require("./Product/resolvers");
 const order = require("./Order/resolvers");
 const post = require("./Post/resolvers");
 const message = require("./Message/resolvers");
+const shop = require("./Shop/resolvers");
+
 module.exports = {
   Product: {
     likeCount: (parent, args) => {
@@ -25,12 +27,18 @@ module.exports = {
       return parent.comments.length;
     },
   },
+  Shop: {
+    followerCount: (parent, args) => {
+      return parent.followers.length;
+    },
+  },
   Query: {
     ...user.Query,
     ...product.Query,
     ...order.Query,
     ...post.Query,
     ...message.Query,
+    ...shop.Query,
   },
   Mutation: {
     ...user.Mutation,
@@ -38,10 +46,12 @@ module.exports = {
     ...order.Mutation,
     ...post.Mutation,
     ...message.Mutation,
+    ...shop.Mutation,
   },
   Subscription: {
     ...user.Subscription,
     ...message.Subscription,
     ...product.Subscription,
+    ...shop.Subscription,
   },
 };
