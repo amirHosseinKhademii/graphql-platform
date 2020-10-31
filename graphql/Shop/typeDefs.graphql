@@ -23,9 +23,15 @@ type Mutation {
     country: String
     region: String
     city: String
-    createdAt: String
     images: [String]
-  ): String
+  ): Boolean
+  updateShop(
+    id: ID
+    name: String
+    region: String
+    city: String
+    images: [String]
+  ): Boolean
   addShopFollower(id: ID!): Boolean
 }
 type Subscription {
