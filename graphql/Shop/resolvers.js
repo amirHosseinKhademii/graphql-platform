@@ -85,8 +85,8 @@ module.exports = {
     updateShop: async (parent, args) => {
       const { id, region, city, images } = args;
       const shop = await Shop.findById(id);
-      shop.region = region !== "" ? region : shop.region;
-      shop.city = city !== "" ? city : shop.city;
+      shop.region = region ? region : shop.region;
+      shop.city = city ? city : shop.city;
       shop.images = images;
       await shop.save();
       return true;
