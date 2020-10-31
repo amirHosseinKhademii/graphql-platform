@@ -8,13 +8,12 @@ type Shop {
   city: String
   createdAt: String
   images: [String]
-  followers: [ID]
+  followers: [User]
   followerCount: Int
 }
 type Query {
   getShops: [Shop]
   getShop(id: ID!): Shop
-  getFollowers(id: ID!): [User]
 }
 
 type Mutation {
@@ -27,7 +26,7 @@ type Mutation {
     createdAt: String
     images: [String]
   ): String
-  addFollower(id: ID!): Boolean
+  addShopFollower(id: ID!): Boolean
 }
 type Subscription {
   onShopCreate: Shop

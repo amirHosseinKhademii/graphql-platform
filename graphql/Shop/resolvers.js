@@ -8,7 +8,7 @@ module.exports = {
   Query: {
     getShops: async () => {
       try {
-        const shops = await Shop.find().populate("owner");
+        const shops = await Shop.find().populate("owner").populate("followers");
         return shops;
       } catch (error) {
         console.error(error);
@@ -16,20 +16,13 @@ module.exports = {
     },
     getShop: async (parent, { id }) => {
       try {
-        const shop = await Shop.findById(id).populate("owner");
+        const shop = await Shop.findById(id)
+          .populate("owner")
+          .populate("followers");
         return shop;
       } catch (error) {
         console.error(error);
       }
-    },
-    getFollowers: async (parent, { id }) => {
-      const user = await Shop.findById(id);
-      let followers = [];
-      user.followers.forEach((item) => {
-        const following = User.findById(item);
-        followers.push(following);
-      });
-      return followers;
     },
   },
   Mutation: {
@@ -66,21 +59,27 @@ module.exports = {
         return true;
       }
     },
-    addFollower: async (parent, { id }, context) => {
+    addShopFollower: async (parent, { id }, context) => {
       const user = authCheck(context);
       const targetShop = await Shop.findById(id);
-      const find = targetShop.followers.find((it) => it === user.id);
-      if (find) {
+      const targetUser = await User.findById(user.id);
+      const followed = targetShop.followers.find((item) => item == user.id);
+      if (followed) {
         targetShop.followers = targetShop.followers.filter(
-          (ite) => ite !== user.id
+          (item) => item != user.id
+        );
+        targetUser.following = targetUser.following.filter(
+          (item) => item != targetShop.id
         );
       } else {
         targetShop.followers = [...targetShop.followers, user.id];
+        targetUser.following = [...targetUser.following, targetShop.id];
       }
       await targetShop.save();
       context.pubsub.publish("NEW_FOLLOWER", {
-        user: id,
+        onFollow: targetUser,
       });
+      await targetUser.save();
       return true;
     },
   },

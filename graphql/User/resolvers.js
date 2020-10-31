@@ -18,7 +18,7 @@ module.exports = {
   Query: {
     getUsers: async () => {
       try {
-        const users = await User.find().populate("shops");
+        const users = await User.find().populate("shops").populate("following");
         return users;
       } catch (error) {
         console.error(error);
@@ -26,21 +26,13 @@ module.exports = {
     },
     getUser: async (parent, args) => {
       try {
-        const user = await User.findById(args.userId).populate("shops");
+        const user = await User.findById(args.userId)
+          .populate("shops")
+          .populate("following");
         return user;
       } catch (error) {
         console.error(error);
       }
-    },
-    getFollowers: async (parent, args, context, info) => {
-      const { userId } = args;
-      const user = await User.findById(userId);
-      let followers = [];
-      user.followers.forEach((item) => {
-        const following = User.findById(item);
-        followers.push(following);
-      });
-      return followers;
     },
   },
   Mutation: {
@@ -127,21 +119,6 @@ module.exports = {
           errors: { msg: "این نام کاربری ثبت نشده است" },
         });
       }
-    },
-    addFollower: async (parent, args, context, info) => {
-      const { userId } = args;
-      const user = authCheck(context);
-      const targetUser = await User.findById(userId);
-      const find = targetUser.followers.find((it) => it === user.id);
-      if (find) {
-        targetUser.followers = targetUser.followers.filter(
-          (ite) => ite !== user.id
-        );
-      } else {
-        targetUser.followers = [...targetUser.followers, user.id];
-      }
-      await targetUser.save();
-      return true;
     },
   },
   Subscription: {

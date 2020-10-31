@@ -8,10 +8,9 @@ type User {
   profile: Profile
   createdAt: String
   type: String
-  followers: [ID]
-  followerCount: Int
   shops: [Shop]
   token: String
+  following: [Shop]
 }
 type Profile {
   userName: String
@@ -26,7 +25,7 @@ type Profile {
 type Query {
   getUsers: [User]
   getUser(userId: ID!): User!
-  getFollowers(userId: ID): [User]
+  # getFollowers(userId: ID): [User]
 }
 
 type Mutation {
@@ -50,7 +49,7 @@ type Mutation {
     image: String
     postCode: String
   ): Boolean
-  addFollower(userId: ID!): Boolean
+  # addFollower(userId: ID!): Boolean
 }
 type Subscription {
   signupUser: User!

@@ -19,9 +19,13 @@ const UserSchema = new Schema({
     image: String,
     postCode: String,
   },
-  followerCount: Number,
-  followers: [],
   shops: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "shops",
+    },
+  ],
+  following: [
     {
       type: Schema.Types.ObjectId,
       ref: "shops",

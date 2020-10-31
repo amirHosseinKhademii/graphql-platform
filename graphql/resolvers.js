@@ -14,11 +14,6 @@ module.exports = {
       return parent.comments.length;
     },
   },
-  User: {
-    followerCount: (parent, args) => {
-      return parent.followers.length;
-    },
-  },
   Post: {
     likeCount: (parent, args) => {
       return parent.likes.length;

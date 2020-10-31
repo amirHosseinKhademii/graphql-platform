@@ -3,10 +3,6 @@ const Schema = mongoose.Schema;
 
 const ShopSchema = new Schema({
   name: String,
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: "users",
-  },
   country: String,
   region: String,
   city: String,
@@ -14,6 +10,15 @@ const ShopSchema = new Schema({
   type: String,
   createdAt: String,
   followerCount: Number,
-  followers: [],
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "users",
+  },
+  followers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "users",
+    },
+  ],
 });
 module.exports = Shop = mongoose.model("shops", ShopSchema);
