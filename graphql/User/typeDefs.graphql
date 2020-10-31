@@ -5,24 +5,27 @@ type User {
   userName: String
   email: String
   password: String
-  token: String
   profile: Profile
   createdAt: String
-  followers: [ID]
-  followerCount: Int
+  type: String
+  shops: [Shop]
+  token: String
+  following: [Shop]
 }
 type Profile {
-  image: String
+  userName: String
+  country: String
+  region: String
+  city: String
   address: String
   phone: String
-  idCode: String
+  image: String
   postCode: String
-  userName: String
 }
 type Query {
   getUsers: [User]
   getUser(userId: ID!): User!
-  getFollowers(userId: ID): [User]
+  # getFollowers(userId: ID): [User]
 }
 
 type Mutation {
@@ -32,17 +35,21 @@ type Mutation {
     userName: String!
     email: String!
     password: String!
+    type: String!
   ): String
 
   login(userName: String!, password: String!): String
   createProfile(
-    image: String
+    userName: String
+    country: String
+    region: String
+    city: String
     address: String
     phone: String
-    idCode: String
+    image: String
     postCode: String
   ): Boolean
-  addFollower(userId: ID!): Boolean
+  # addFollower(userId: ID!): Boolean
 }
 type Subscription {
   signupUser: User!

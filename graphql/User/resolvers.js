@@ -16,36 +16,28 @@ const tokenGenerator = (user) => {
 // other shits
 module.exports = {
   Query: {
-    getUsers: async (parent, args) => {
+    getUsers: async () => {
       try {
-        const users = await User.find();
+        const users = await User.find().populate("shops").populate("following");
         return users;
       } catch (error) {
         console.error(error);
       }
     },
-    getUser: async (parent, args, context, info) => {
+    getUser: async (parent, args) => {
       try {
-        const user = await User.findById(args.userId);
+        const user = await User.findById(args.userId)
+          .populate("shops")
+          .populate("following");
         return user;
       } catch (error) {
         console.error(error);
       }
     },
-    getFollowers: async (parent, args, context, info) => {
-      const { userId } = args;
-      const user = await User.findById(userId);
-      let followers = [];
-      user.followers.forEach((item) => {
-        const following = User.findById(item);
-        followers.push(following);
-      });
-      return followers;
-    },
   },
   Mutation: {
     signup: async (parent, args, context, info) => {
-      const { name, lastName, userName, email, password } = args;
+      const { name, lastName, userName, email, password, type } = args;
       const user = await User.findOne({ email: email });
       const userByUserName = await User.findOne({ userName: userName });
       //validation
@@ -74,6 +66,7 @@ module.exports = {
           lastName,
           userName,
           email,
+          type,
           password: hashed,
           createdAt: new Date().toDateString(),
         });
@@ -105,11 +98,20 @@ module.exports = {
       }
     },
     createProfile: async (parent, args, context, info) => {
-      const { image, address, phone, idCode, postCode } = args;
+      const { country, region, city, address, phone, image, postCode } = args;
       const { userName } = authCheck(context);
       const user = await User.findOne({ userName });
       if (user) {
-        user.profile = { image, address, phone, idCode, postCode, userName };
+        user.profile = {
+          country,
+          region,
+          city,
+          address,
+          phone,
+          image,
+          postCode,
+          userName,
+        };
         await user.save();
         return true;
       } else {
@@ -117,21 +119,6 @@ module.exports = {
           errors: { msg: "این نام کاربری ثبت نشده است" },
         });
       }
-    },
-    addFollower: async (parent, args, context, info) => {
-      const { userId } = args;
-      const user = authCheck(context);
-      const targetUser = await User.findById(userId);
-      const find = targetUser.followers.find((it) => it === user.id);
-      if (find) {
-        targetUser.followers = targetUser.followers.filter(
-          (ite) => ite !== user.id
-        );
-      } else {
-        targetUser.followers = [...targetUser.followers, user.id];
-      }
-      await targetUser.save();
-      return true;
     },
   },
   Subscription: {

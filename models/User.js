@@ -7,16 +7,29 @@ const UserSchema = new Schema({
   userName: String,
   email: String,
   password: String,
+  type: String,
   createdAt: String,
   profile: {
-    image: String,
-    address: String,
-    phone: Number,
-    idCode: Number,
-    postCode: Number,
     userName: String,
+    country: String,
+    region: String,
+    city: String,
+    address: String,
+    phone: String,
+    image: String,
+    postCode: String,
   },
-  followerCount: Number,
-  followers: [],
+  shops: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "shops",
+    },
+  ],
+  following: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "shops",
+    },
+  ],
 });
-module.exports = User = mongoose.model("user", UserSchema);
+module.exports = User = mongoose.model("users", UserSchema);
