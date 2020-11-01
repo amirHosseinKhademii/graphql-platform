@@ -117,17 +117,17 @@ module.exports = {
       const { userName } = authCheck(context);
       const user = await User.findOne({ userName });
       if (user) {
-        user.name = name;
-        user.lastName = lastName;
+        user.name = name ? name : user.name;
+        user.lastName = lastName ? lastName : user.lastName;
         user.profile = {
-          country,
-          region,
-          city,
-          address,
-          phone,
-          image,
-          postCode,
-          userName,
+          country: country ? country : user.profile.country,
+          region: region ? region : user.profile.region,
+          city: city ? city : user.profile.city,
+          address: address ? address : user.profile.address,
+          phone: phone ? phone : user.profile.phone,
+          image: image ? image : user.profile.image,
+          postCode: postCode ? postCode : user.profile.postCode,
+          userName: userName ? userName : user.profile.userName,
         };
         await user.save();
         return true;
