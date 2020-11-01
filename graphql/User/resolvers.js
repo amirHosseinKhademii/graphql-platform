@@ -102,11 +102,23 @@ module.exports = {
         }
       }
     },
-    createProfile: async (parent, args, context, info) => {
-      const { country, region, city, address, phone, image, postCode } = args;
+    updateProfile: async (parent, args, context, info) => {
+      const {
+        country,
+        region,
+        city,
+        address,
+        phone,
+        image,
+        postCode,
+        name,
+        lastName,
+      } = args;
       const { userName } = authCheck(context);
       const user = await User.findOne({ userName });
       if (user) {
+        user.name = name;
+        user.lastName = lastName;
         user.profile = {
           country,
           region,

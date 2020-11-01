@@ -39,8 +39,10 @@ type Mutation {
   ): String
 
   login(userName: String!, password: String!): String
-  createProfile(
-    userName: String
+
+  updateProfile(
+    name: String
+    lastName: String
     country: String
     region: String
     city: String
@@ -49,7 +51,6 @@ type Mutation {
     image: String
     postCode: String
   ): Boolean
-  # addFollower(userId: ID!): Boolean
 }
 type Subscription {
   signupUser: User!
