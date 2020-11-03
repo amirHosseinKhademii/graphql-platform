@@ -27,7 +27,7 @@ module.exports = {
   },
   Mutation: {
     createShop: async (parent, args, context) => {
-      const { type, name, country, region, city, images } = args;
+      const { type, name, country, region, city, address, images } = args;
       const shop = await Shop.findOne({ name: name });
       const user = authCheck(context);
       //validation
@@ -45,6 +45,7 @@ module.exports = {
           country,
           region,
           city,
+          address,
           images,
           createdAt: new Date().toDateString(),
         });
@@ -82,10 +83,11 @@ module.exports = {
       return true;
     },
     updateShop: async (parent, args) => {
-      const { id, region, city, images } = args;
+      const { id, region, city, address, images } = args;
       const shop = await Shop.findById(id);
       shop.region = region ? region : shop.region;
       shop.city = city ? city : shop.city;
+      shop.address = address ? address : shop.address;
       shop.images = images;
       await shop.save();
       return true;

@@ -6,6 +6,7 @@ type Shop {
   country: String
   region: String
   city: String
+  address: String
   createdAt: String
   images: [String]
   followers: [User]
@@ -23,6 +24,7 @@ type Mutation {
     country: String
     region: String
     city: String
+    address: String
     images: [String]
   ): Boolean
   updateShop(
@@ -30,6 +32,7 @@ type Mutation {
     name: String
     region: String
     city: String
+    address: String
     images: [String]
   ): Boolean
   addShopFollower(id: ID!): Boolean
