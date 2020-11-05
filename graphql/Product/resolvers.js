@@ -1,24 +1,17 @@
 const Product = require("../../models/Product");
 const Shop = require("../../models/Shop");
 const authCheck = require("../../util/authCheck");
-const { PubSub } = require("apollo-server");
-const pubsub = new PubSub();
 
 module.exports = {
   Query: {
     products: async () => {
       const products = await Product.find()
         .populate("shop")
-        .populate("comments")
-        .populate("likes")
         .sort({ createdAt: -1 });
       return products;
     },
     product: async (parent, args) => {
-      const product = await Product.findById(args.productId)
-        .populate("shop")
-        .populate("comments")
-        .populate("likes");
+      const product = await Product.findById(args.productId).populate("shop");
       return product;
     },
   },
@@ -97,21 +90,18 @@ module.exports = {
         const { productId } = args;
         const product = await Product.findById(productId);
         const user = authCheck(context);
-        const find = product.likes.find(
-          (ite) => ite.userName === user.userName
-        );
-        if (find) {
+        const like = {
+          user: user.userName,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        const liked = product.likes.find((item) => item.user == user.userName);
+        if (liked) {
           product.likes = product.likes.filter(
-            (is) => is.userName !== user.userName
+            (item) => item.user != user.userName
           );
         } else {
-          product.likes = [
-            ...product.likes,
-            {
-              userName: user.userName,
-              createdAt: new Date().toISOString(),
-            },
-          ];
+          product.likes = [like, ...product.likes];
         }
         await product.save();
         return true;
@@ -122,16 +112,15 @@ module.exports = {
     createComment: async (parent, args, context, info) => {
       const { productId, body } = args;
       try {
-        const product = await Product.findById(productId);
         const user = authCheck(context);
-        product.comments = [
-          {
-            body,
-            userName: user.userName,
-            createdAt: new Date().toISOString(),
-          },
-          ...product.comments,
-        ];
+        const product = await Product.findById(productId);
+        const comment = {
+          user: user.userName,
+          body,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        product.comments = [comment, ...product.comments];
         await product.save();
         return true;
       } catch (error) {
@@ -144,7 +133,7 @@ module.exports = {
         const user = authCheck(context);
         const product = await Product.findById(productId);
         const comment = product.comments.find((it) => it.id === commentId);
-        if (comment && comment.userName === user.userName) {
+        if (comment && comment.user === user.userName) {
           product.comments = product.comments.filter(
             (item) => item.id !== commentId
           );

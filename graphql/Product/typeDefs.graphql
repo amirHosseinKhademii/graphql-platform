@@ -19,16 +19,14 @@ type Product {
 }
 type Comment {
   id: ID
-  user: User
-  belongsTo: Product
+  user: String
+  body: String
   createdAt: String
   updatedAt: String
 }
 type Like {
   id: ID
-  user: User
-  belongsTo: Product
-  body: String
+  user: String
   createdAt: String
   updatedAt: String
 }

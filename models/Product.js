@@ -17,14 +17,17 @@ const ProductSchema = new Schema({
   },
   comments: [
     {
-      type: Schema.Types.ObjectId,
-      ref: "comments",
+      user: String,
+      body: String,
+      createdAt: String,
+      updatedAt: String,
     },
   ],
   likes: [
     {
-      type: Schema.Types.ObjectId,
-      ref: "users",
+      user: String,
+      createdAt: String,
+      updatedAt: String,
     },
   ],
   commentCount: Number,
