@@ -26,6 +26,9 @@ module.exports = {
     followerCount: (parent, args) => {
       return parent.followers.length;
     },
+    productCount: (parent, args) => {
+      return parent.products.length;
+    },
   },
   Query: {
     ...user.Query,

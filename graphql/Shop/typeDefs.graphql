@@ -12,6 +12,7 @@ type Shop {
   images: [String]
   followers: [User]
   followerCount: Int
+  productCount: Int
 }
 type Query {
   getShops: [Shop]
