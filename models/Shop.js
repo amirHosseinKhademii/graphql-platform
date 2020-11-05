@@ -21,5 +21,11 @@ const ShopSchema = new Schema({
       ref: "users",
     },
   ],
+  products: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "products",
+    },
+  ],
 });
 module.exports = Shop = mongoose.model("shops", ShopSchema);

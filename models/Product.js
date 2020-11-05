@@ -11,21 +11,26 @@ const ProductSchema = new Schema({
   size: String,
   number: Number,
   desc: String,
-  createdAt: String,
+  shop: {
+    type: Schema.Types.ObjectId,
+    ref: "shops",
+  },
   comments: [
     {
-      userName: String,
-      body: String,
-      createdAt: String,
+      type: Schema.Types.ObjectId,
+      ref: "comments",
     },
   ],
   likes: [
     {
-      userName: String,
-      createdAt: String,
+      type: Schema.Types.ObjectId,
+      ref: "users",
     },
   ],
   commentCount: Number,
   likeCount: Number,
+  createdAt: String,
+  updatedAt: String,
 });
-module.exports = Product = mongoose.model("product", ProductSchema);
+
+module.exports = Product = mongoose.model("products", ProductSchema);

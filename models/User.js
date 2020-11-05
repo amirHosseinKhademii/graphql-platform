@@ -31,5 +31,17 @@ const UserSchema = new Schema({
       ref: "shops",
     },
   ],
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "products",
+    },
+  ],
+  likes: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "products",
+    },
+  ],
 });
 module.exports = User = mongoose.model("users", UserSchema);

@@ -7,6 +7,7 @@ type Shop {
   region: String
   city: String
   address: String
+  products: [Product]
   createdAt: String
   images: [String]
   followers: [User]

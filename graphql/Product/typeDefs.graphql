@@ -2,51 +2,57 @@ type Product {
   id: ID
   userName: String
   title: String
-  image: String
+  images: [String]
   price: Int
   color: String
   company: String
   size: String
   number: Int
   desc: String
-  createdAt: String
+  shop: Shop
   comments: [Comment]
   likes: [Like]
   commentCount: Int
   likeCount: Int
-}
-type Like {
-  id: ID
-  userName: String
   createdAt: String
+  updatedAt: String
 }
 type Comment {
   id: ID
-  body: String
-  userName: String
+  user: User
+  belongsTo: Product
   createdAt: String
+  updatedAt: String
+}
+type Like {
+  id: ID
+  user: User
+  belongsTo: Product
+  body: String
+  createdAt: String
+  updatedAt: String
 }
 type Query {
-  getProducts: [Product]
-  getProduct(productId: ID!): Product!
+  products: [Product]
+  product(id: ID!): Product!
 }
 
 type Mutation {
   createProduct(
-    image: String
+    title: String
+    images: [String]
     price: Int
     color: String
     company: String
     size: String
     number: Int
     desc: String
-    title: String
-    userName: String
+    shopId: ID
   ): Boolean
   deleteProduct(productId: ID!): Boolean
   updateProduct(
     productId: ID!
-    image: String
+    images: [String]
     price: Int
     color: String
     company: String
@@ -60,5 +66,5 @@ type Mutation {
   deleteComment(productId: ID!, commentId: ID!): Boolean
 }
 type Subscription {
-  newProduct(channelId: String): Product
+  onProductCreate: Product
 }

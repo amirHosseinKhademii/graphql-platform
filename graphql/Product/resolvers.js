@@ -1,25 +1,32 @@
 const Product = require("../../models/Product");
+const Shop = require("../../models/Shop");
 const authCheck = require("../../util/authCheck");
-const { PubSub, withFilter } = require("apollo-server");
+const { PubSub } = require("apollo-server");
 const pubsub = new PubSub();
 
 module.exports = {
   Query: {
-    getProducts: async (parent, args, context, info) => {
-      const products = await Product.find().sort({ createdAt: -1 });
+    products: async () => {
+      const products = await Product.find()
+        .populate("shop")
+        .populate("comments")
+        .populate("likes")
+        .sort({ createdAt: -1 });
       return products;
     },
-    getProduct: async (parent, args, context, info) => {
-      const product = await Product.findById(args.productId);
+    product: async (parent, args) => {
+      const product = await Product.findById(args.productId)
+        .populate("shop")
+        .populate("comments")
+        .populate("likes");
       return product;
     },
   },
   Mutation: {
-    createProduct: async (parent, args, context, info) => {
+    createProduct: async (parent, args, context) => {
       const { userName } = authCheck(context);
-      const { image, price, color, company, size, number, desc, title } = args;
-      const newProduct = new Product({
-        image,
+      const {
+        images,
         price,
         color,
         company,
@@ -27,18 +34,33 @@ module.exports = {
         number,
         desc,
         title,
+        shopId,
+      } = args;
+
+      const shop = await Shop.findById(shopId);
+      const newProduct = new Product({
+        title,
         userName,
+        images,
+        price,
+        color,
+        company,
+        size,
+        number,
+        desc,
+        shop: shopId,
         createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       });
       const res = await newProduct.save();
-      pubsub.publish("ADD_PRODUCT", {
-        newProduct: res,
-        channelId: "1",
+      context.pubsub.publish("NEW_PRODUCT", {
+        product: res,
       });
-
+      shop.products = [newProduct, ...shop.products];
+      await shop.save();
       return true;
     },
-    deleteProduct: async (parent, args, context, info) => {
+    deleteProduct: async (parent, args, context) => {
       const user = authCheck(context);
       const product = await Product.findById(args.productId);
       if (product.userName === user.userName) {
@@ -46,9 +68,9 @@ module.exports = {
         return true;
       }
     },
-    updateProduct: async (parent, args, context, info) => {
+    updateProduct: async (parent, args) => {
       const {
-        image,
+        images,
         price,
         color,
         company,
@@ -59,7 +81,7 @@ module.exports = {
         title,
       } = args;
       const product = await Product.findById(productId);
-      product.image = image ? image : product.image;
+      product.images = images ? images : product.images;
       product.price = price ? price : product.price;
       product.color = color ? color : product.color;
       product.company = company ? company : product.company;
@@ -137,13 +159,10 @@ module.exports = {
     },
   },
   Subscription: {
-    newProduct: {
-      subscribe: withFilter(
-        () => pubsub.asyncIterator("ADD_PRODUCT"),
-        (payload, args) => {
-          return payload.channelId === args.channelId;
-        }
-      ),
+    onProductCreate: {
+      subscribe: (_, __, { pubsub }) => {
+        return pubsub.asyncIterator("NEW_PRODUCT");
+      },
     },
   },
 };

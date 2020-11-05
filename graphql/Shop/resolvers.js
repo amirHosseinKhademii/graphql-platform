@@ -8,7 +8,10 @@ module.exports = {
   Query: {
     getShops: async () => {
       try {
-        const shops = await Shop.find().populate("owner").populate("followers");
+        const shops = await Shop.find()
+          .populate("owner")
+          .populate("followers")
+          .populate("products");
         return shops;
       } catch (error) {
         console.error(error);
@@ -18,7 +21,8 @@ module.exports = {
       try {
         const shop = await Shop.findById(id)
           .populate("owner")
-          .populate("followers");
+          .populate("followers")
+          .populate("products");
         return shop;
       } catch (error) {
         console.error(error);
