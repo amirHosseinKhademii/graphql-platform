@@ -1,0 +1,10 @@
+type Style {
+  style: String
+}
+type Query {
+  getStyles: [Style]
+}
+
+type Mutation {
+  addStyle(style: String!): Boolean
+}

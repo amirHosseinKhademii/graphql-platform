@@ -4,6 +4,7 @@ const order = require("./Order/resolvers");
 const post = require("./Post/resolvers");
 const message = require("./Message/resolvers");
 const shop = require("./Shop/resolvers");
+const style = require("./Style/resolvers");
 
 module.exports = {
   Product: {
@@ -37,6 +38,7 @@ module.exports = {
     ...post.Query,
     ...message.Query,
     ...shop.Query,
+    ...style.Query,
   },
   Mutation: {
     ...user.Mutation,
@@ -45,6 +47,7 @@ module.exports = {
     ...post.Mutation,
     ...message.Mutation,
     ...shop.Mutation,
+    ...style.Mutation,
   },
   Subscription: {
     ...user.Subscription,
