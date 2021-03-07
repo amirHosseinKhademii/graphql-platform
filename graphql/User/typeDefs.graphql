@@ -36,7 +36,7 @@ type Mutation {
     email: String!
     password: String!
     type: String!
-  ): String
+  ): User
 
   login(userName: String!, password: String!): User
 
