@@ -38,7 +38,7 @@ type Mutation {
     type: String!
   ): String
 
-  login(userName: String!, password: String!): String
+  login(userName: String!, password: String!): User
 
   updateProfile(
     name: String

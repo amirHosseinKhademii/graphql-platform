@@ -79,8 +79,15 @@ module.exports = {
         context.pubsub.publish("NEW_USER", {
           signupUser: res,
         });
-        const token = tokenGenerator(res);
-        return token;
+
+        return {
+          name: user.name,
+          lastName: user.lastName,
+          userName: user.userName,
+          email: user.email,
+          type: user.type,
+          token: tokenGenerator(res),
+        };
       }
     },
     login: async (parent, args, context, info) => {
@@ -97,8 +104,14 @@ module.exports = {
             errors: { msg: "رمز وارد شده اشتباه است" },
           });
         } else {
-          const token = tokenGenerator(user);
-          return token;
+          return {
+            name: user.name,
+            lastName: user.lastName,
+            userName: user.userName,
+            email: user.email,
+            type: user.type,
+            token: tokenGenerator(user),
+          };
         }
       }
     },
