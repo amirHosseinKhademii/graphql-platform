@@ -81,11 +81,11 @@ module.exports = {
         });
 
         return {
-          name: user.name,
-          lastName: user.lastName,
-          userName: user.userName,
-          email: user.email,
-          type: user.type,
+          name: res.name,
+          lastName: res.lastName,
+          userName: res.userName,
+          email: res.email,
+          type: res.type,
           token: tokenGenerator(res),
         };
       }
